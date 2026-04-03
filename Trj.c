@@ -11,14 +11,20 @@ bool Match_Checking(const char* string, const char* pattern);
 int regedit_add_to_startup();
 
 int main() {
-    printf("Do you wont add this app in startup apps? Your ans (yes or no): ");
+    printf("Do you won't add this app in startup apps? Your ans (yes or no): ");
     char yes_or_no[10];
-    scanf_s("%9s", yes_or_no, (unsigned)sizeof(yes_or_no));
-
-    if (Match_Checking(yes_or_no, pattern_yes)) {
-        regedit_add_to_startup();
+    outerLoop:
+    while ((scanf_s("%9s", yes_or_no, (unsigned)sizeof(yes_or_no))) != EOF) {
+        if (Match_Checking(yes_or_no, pattern_yes)) {
+            regedit_add_to_startup();
+            goto end;
+        }
+        else if (Match_Checking(yes_or_no, pattern_no)) {
+            goto end;
+        }
     }
 
+    end:
     return 0;
 }
 
@@ -38,7 +44,7 @@ bool Match_Checking(const char* string, const char* pattern) {
 
 int regedit_add_to_startup() {
     HKEY hkey;
-    char subkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+    LPCSTR subkey = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
     LSTATUS status = RegOpenKeyEx(HKEY_CURRENT_USER, subkey, 0, KEY_READ, &hkey);
 
     if (status == ERROR_SUCCESS) {
@@ -57,7 +63,7 @@ int regedit_add_to_startup() {
         if (status == ERROR_ACCESS_DENIED) {
             printf("denied");
         } else if (status == ERROR_FILE_NOT_FOUND) {
-            printf("File not founded.");
+            printf("File not found.");
         }
     }
 
