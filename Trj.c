@@ -47,23 +47,30 @@ int regedit_add_to_startup() {
     LPCSTR subkey = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
     LSTATUS status = RegOpenKeyEx(HKEY_CURRENT_USER, subkey, 0, KEY_READ, &hkey);
 
-    if (status == ERROR_SUCCESS) {
-        printf("Regedit ex open success");
-        char name_key = "TestName";
-        char data[20] = "TestData\0";
-
-        LONG setRes = RegSetValueEx(
-            hkey, name_key, 0, REG_SZ, (LPBYTE)data, strlen(data) + 1
-        );
-
-        RegCloseKey(hkey);
-    } else {
-        printf("Regedit ex open error: %ld\n", status);
-
-        if (status == ERROR_ACCESS_DENIED) {
-            printf("denied");
-        } else if (status == ERROR_FILE_NOT_FOUND) {
-            printf("File not found.");
+    switch (status) {
+        case ERROR_SUCCESS: {
+            printf("Regedit open success");
+            char name_key = "TestName";
+            char data[20] = "TestData\0";
+        
+            LONG setRes = RegSetValueEx(
+                hkey, name_key, 0, REG_SZ, (LPBYTE)data, strlen(data) + 1
+            );
+        
+            RegCloseKey(hkey);
+            break;
+        }
+        case ERROR_ACCESS_DENIED: {
+            printf("access denied. Status: %dl\n", status);
+            break;
+        }
+        case ERROR_FILE_NOT_FOUND: {
+            printf("File not found. Status: %dl\n", status);
+            break;
+        }
+        default: {
+            printf("Regedit ex open error: %ld\n", status);
+            break;
         }
     }
 
