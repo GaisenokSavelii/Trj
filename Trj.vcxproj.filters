@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Trj.c">
+    <ClCompile Include="src\Trj.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

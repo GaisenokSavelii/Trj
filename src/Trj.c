@@ -8,7 +8,7 @@ char pattern_yes[] = "yes";
 char pattern_no[] = "no";
 
 bool Match_Checking(const char* string, const char* pattern);
-int regedit_add_to_startup();
+int regedit_add_to_startup(void);
 
 int main() {
     printf("Do you won't add this app in startup apps? Your ans (yes or no): ");
@@ -46,7 +46,7 @@ bool Match_Checking(const char* string, const char* pattern) {
     return false;
 }
 
-int regedit_add_to_startup() {
+int regedit_add_to_startup(void) {
     HKEY hkey;
     LPCSTR subkey = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
     LSTATUS status = RegOpenKeyEx(
@@ -59,7 +59,7 @@ int regedit_add_to_startup() {
 
     switch (status) {
         case ERROR_SUCCESS: {
-            printf("Regedit open success"); 
+            printf("Regedit open success");
             const wchar_t* Name = L"Test value";
             const wchar_t* Value = L"Test value";
 
