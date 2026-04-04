@@ -32,7 +32,11 @@ bool Match_Checking(const char* string, const char* pattern) {
     int i, j, k;
 
     for (i = 0; string[i] != '\0'; i++) {
-        for (j = i, k = 0; pattern[k] != '\0' && string[j] == pattern[k]; k++, j++);
+        for (
+            j = i, k = 0;
+             pattern[k] != '\0' && string[j] == pattern[k];
+              k++, j++
+        );
 
         if ((k > 0 && pattern[k] == '\0') && (i >= 0)) {
             return true;
@@ -45,27 +49,38 @@ bool Match_Checking(const char* string, const char* pattern) {
 int regedit_add_to_startup() {
     HKEY hkey;
     LPCSTR subkey = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
-    LSTATUS status = RegOpenKeyEx(HKEY_CURRENT_USER, subkey, 0, KEY_READ, &hkey);
+    LSTATUS status = RegOpenKeyEx(
+        HKEY_CURRENT_USER,
+        subkey,
+        0,
+        KEY_SET_VALUE,
+        &hkey
+    );
 
     switch (status) {
         case ERROR_SUCCESS: {
-            printf("Regedit open success");
-            char name_key = "TestName";
-            char data[20] = "TestData\0";
-        
-            LONG setRes = RegSetValueEx(
-                hkey, name_key, 0, REG_SZ, (LPBYTE)data, strlen(data) + 1
+            printf("Regedit open success"); 
+            const wchar_t* Name = L"Test value";
+            const wchar_t* Value = L"Test value";
+
+            LONG RegAddValue = RegSetValueEx(
+                hkey,
+                Name,
+                0,
+                REG_SZ,
+                (const BYTE*) Value,
+                (DWORD) ((wcslen(Value) + 1) * sizeof(wchar_t))
             );
         
             RegCloseKey(hkey);
             break;
         }
         case ERROR_ACCESS_DENIED: {
-            printf("access denied. Status: %dl\n", status);
+            printf("Access denied. Status: %ld\n", status);
             break;
         }
         case ERROR_FILE_NOT_FOUND: {
-            printf("File not found. Status: %dl\n", status);
+            printf("File not found. Status: %ld\n", status);
             break;
         }
         default: {
