@@ -17,6 +17,7 @@ typedef struct {
 bool Match_Checking(const char* string, const char* pattern);
 inline static void regedit_add_to_startup(regedit_all* data, LSTATUS status);
 LSTATUS regedit_open_key(HKEY parent_key, regedit_all* data);
+LSTATUS regedit_add_key(regedit_all* data);
 
 int main() {
     printf("Do you won't add this app in startup apps? Your ans (yes or no): ");
@@ -66,7 +67,18 @@ bool Match_Checking(const char* string, const char* pattern) {
     return false;
 }
 
-LSTATUS regedit_open_key(HKEY parent_key, regedit_all *data) {
+LSTATUS regedit_add_key(regedit_all* data) {
+    return RegSetValueEx(
+        data->hkey,
+        data->name_value,
+        0,
+        REG_SZ,
+        (const BYTE*)data->value,
+        (DWORD)((wcslen(data->value) + 1) * sizeof(wchar_t))
+    );
+}
+
+LSTATUS regedit_open_key(HKEY parent_key, regedit_all* data) {
     return RegOpenKeyEx(
         parent_key,
         data->sub_key,
@@ -79,14 +91,7 @@ LSTATUS regedit_open_key(HKEY parent_key, regedit_all *data) {
 inline static void regedit_add_to_startup(regedit_all* data, LSTATUS status) {
     switch (status) {
     case ERROR_SUCCESS: {
-        LONG RegAddValue = RegSetValueEx(
-            data->hkey,
-            data->name_value,
-            0,
-            REG_SZ,
-            (const BYTE*) data->value,
-            (DWORD) ((wcslen(data->value) + 1) * sizeof(wchar_t))
-        );
+        regedit_add_key(data);
 
         RegCloseKey(data->hkey);
         break;
