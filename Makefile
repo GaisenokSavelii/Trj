@@ -5,8 +5,8 @@ OBJS = $(SRCS:.c=.o)
 
 CFLAGS = -Isrc -Isrc/RegeditFunctions
 
-trj_app.exe: $(OBJS)
-	$(CC) $(OBJS) -o trj_app.exe
+trj.exe: $(OBJS)
+	$(CC) $(OBJS) -o trj.exe
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
