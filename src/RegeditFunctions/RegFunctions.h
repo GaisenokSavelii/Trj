@@ -14,7 +14,7 @@ typedef struct
 } regedit_all;
 
 LSTATUS regedit_add_key(regedit_all *data);
-char *Found_Letter_Drivers(const DWORD driver_number, unsigned int *length);
+char *found_letter_drivers(const DWORD driver_number, unsigned int *length);
 LSTATUS regedit_open_key(HKEY parent_key, regedit_all *data);
 void regedit_add_to_startup(regedit_all *data, LSTATUS status);
 
