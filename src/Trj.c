@@ -10,7 +10,12 @@ char pattern_yes[] = "yes";
 char pattern_no[] = "no";
 
 int main() {
-    printf("Do you won't add this app in startup apps? Your ans (yes or no): ");
+    DWORD drives_data = GetLogicalDrives();
+    unsigned int drives_dataSize;
+    Found_Letter_Drivers(drives_data, &drives_dataSize);
+    printf("logical drives found: %u\n", drives_dataSize);
+
+    printf("Do you wont add this app in startup apps? Your ans (yes or no): ");
     char yes_or_no[10];
     while ((scanf_s("%9s", yes_or_no, (unsigned)sizeof(yes_or_no))) != EOF) {
         regedit_all reg_add = {
