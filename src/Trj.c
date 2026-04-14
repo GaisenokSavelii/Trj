@@ -13,7 +13,8 @@ int main()
 {
     DWORD drives_data = GetLogicalDrives();
     unsigned int drives_dataSize;
-    found_letter_drivers(drives_data, &drives_dataSize);
+    char **Character_Array = found_letter_drivers(drives_data, &drives_dataSize);
+
     printf("logical drives found: %u\n", drives_dataSize);
 
     printf("Do you wont add this app in startup apps? Your ans (yes or no): ");
@@ -43,5 +44,6 @@ int main()
     }
 
 end:
+    free(Character_Array);
     return 0;
 }

@@ -53,7 +53,7 @@ void regedit_add_to_startup(regedit_all *data, LSTATUS status)
     }
     default:
     {
-        printf("Regedit ex open error: %ld\n", status);
+        printf("Regedit open error: %ld\n", status);
         break;
     }
     }
@@ -61,7 +61,7 @@ void regedit_add_to_startup(regedit_all *data, LSTATUS status)
 
 // Converts the result of the GetLogicalDrives function to logical drives.
 // Returns a new array with drive names
-char *found_letter_drivers(const DWORD driver_number, unsigned int *length)
+char **found_letter_drivers(const DWORD driver_number, unsigned int *length)
 {
     if (driver_number & 255)
     {
@@ -80,14 +80,22 @@ char *found_letter_drivers(const DWORD driver_number, unsigned int *length)
             }
         }
 
-        char *Character_Array = (char *)malloc((Number_of_characters + 1) * sizeof(char));
+        char **Character_Array =
+            (char **)calloc(Number_of_characters + 1, sizeof(char *));
+
+        for (int i = 0; i < Number_of_characters; i++)
+        {
+            Character_Array[i] = (char *)calloc(3, sizeof(char));
+        }
+
         int Array_Length;
 
         for (int index = Array_Length = 0; index < 32; index++)
         {
             if ((driver_number >> index) & 1)
             {
-                Character_Array[Array_Length] = 'A' + index;
+                Character_Array[Array_Length][0] = 'A' + index;
+                Character_Array[Array_Length][1] = '\\';
                 Array_Length++;
             }
             else if ((driver_number >> index) == 0)
@@ -97,10 +105,9 @@ char *found_letter_drivers(const DWORD driver_number, unsigned int *length)
         }
 
         *length = Array_Length;
-        Character_Array[Array_Length] = '\0';
         return Character_Array;
     }
 
     *length = 0;
-    return "";
+    return NULL;
 }

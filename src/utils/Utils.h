@@ -5,6 +5,6 @@
 
 #include <stdbool.h>
 
-bool Match_Checking(const char* string, const char* pattern);
+bool Match_Checking(const char *string, const char *pattern);
 
 #endif // UTILS_H
