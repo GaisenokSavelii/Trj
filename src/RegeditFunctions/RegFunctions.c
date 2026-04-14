@@ -111,3 +111,16 @@ char **found_letter_drivers(const DWORD driver_number, unsigned int *length)
     *length = 0;
     return NULL;
 }
+
+void free_drivers(char **drivers_arr, unsigned int len)
+{
+    if (!drivers_arr)
+        return;
+
+    for (unsigned int i = 0; i < len; i++)
+    {
+        free(drivers_arr[i]);
+    }
+
+    free(drivers_arr);
+}

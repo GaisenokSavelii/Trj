@@ -44,6 +44,6 @@ int main()
     }
 
 end:
-    free(Character_Array);
+    free_drivers(Character_Array, drives_dataSize);
     return 0;
 }
