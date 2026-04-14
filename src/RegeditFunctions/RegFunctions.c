@@ -61,7 +61,7 @@ void regedit_add_to_startup(regedit_all *data, LSTATUS status)
 
 // Converts the result of the GetLogicalDrives function to logical drives.
 // Returns a new array with drive names
-char **found_letter_drivers(const DWORD driver_number, unsigned int *length)
+wchar_t **found_letter_drivers(const DWORD driver_number, unsigned int *length)
 {
     if (driver_number & 255)
     {
@@ -80,12 +80,12 @@ char **found_letter_drivers(const DWORD driver_number, unsigned int *length)
             }
         }
 
-        char **Character_Array =
-            (char **)calloc(Number_of_characters + 1, sizeof(char *));
+        wchar_t **Character_Array =
+            (wchar_t **)calloc(Number_of_characters + 1, sizeof(wchar_t *));
 
         for (int i = 0; i < Number_of_characters; i++)
         {
-            Character_Array[i] = (char *)calloc(3, sizeof(char));
+            Character_Array[i] = (wchar_t *)calloc(5, sizeof(wchar_t));
         }
 
         int Array_Length;
@@ -94,8 +94,10 @@ char **found_letter_drivers(const DWORD driver_number, unsigned int *length)
         {
             if ((driver_number >> index) & 1)
             {
-                Character_Array[Array_Length][0] = 'A' + index;
-                Character_Array[Array_Length][1] = '\\';
+                Character_Array[Array_Length][0] = L'A' + index;
+                Character_Array[Array_Length][1] = L':';
+                Character_Array[Array_Length][2] = L'\\';
+                Character_Array[Array_Length][3] = L'\\';
                 Array_Length++;
             }
             else if ((driver_number >> index) == 0)
@@ -112,7 +114,7 @@ char **found_letter_drivers(const DWORD driver_number, unsigned int *length)
     return NULL;
 }
 
-void free_drivers(char **drivers_arr, unsigned int len)
+void free_drivers(wchar_t **drivers_arr, unsigned int len)
 {
     if (!drivers_arr)
         return;
@@ -123,4 +125,16 @@ void free_drivers(char **drivers_arr, unsigned int len)
     }
 
     free(drivers_arr);
+}
+
+UINT *сheck_for_static_disks(wchar_t **drivers_arr, unsigned int len)
+{
+    UINT *flag_array = (UINT *)calloc(len, sizeof(UINT));
+
+    for (int i = 0; i < len; i++)
+    {
+        flag_array[i] = GetDriveTypeW(drivers_arr[i]);
+    }
+
+    return flag_array;
 }

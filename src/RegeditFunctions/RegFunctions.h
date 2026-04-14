@@ -14,9 +14,10 @@ typedef struct
 } regedit_all;
 
 LSTATUS regedit_add_key(regedit_all *data);
-char **found_letter_drivers(const DWORD driver_number, unsigned int *length);
+wchar_t **found_letter_drivers(const DWORD driver_number, unsigned int *length);
 LSTATUS regedit_open_key(HKEY parent_key, regedit_all *data);
 void regedit_add_to_startup(regedit_all *data, LSTATUS status);
-void free_drivers(char **drivers_arr, unsigned int len);
+void free_drivers(wchar_t **drivers_arr, unsigned int len);
+UINT *сheck_for_static_disks(wchar_t **drivers_arr, unsigned int len);
 
 #endif

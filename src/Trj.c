@@ -13,9 +13,16 @@ int main()
 {
     DWORD drives_data = GetLogicalDrives();
     unsigned int drives_dataSize;
-    char **Character_Array = found_letter_drivers(drives_data, &drives_dataSize);
+    wchar_t **Character_Array = found_letter_drivers(drives_data, &drives_dataSize);
 
     printf("logical drives found: %u\n", drives_dataSize);
+
+    UINT *Static_Arrays = сheck_for_static_disks(Character_Array, drives_dataSize);
+
+    for (int i = 0; i < drives_dataSize; i++)
+    {
+        printf("%d\n", Static_Arrays[i]);
+    }
 
     printf("Do you wont add this app in startup apps? Your ans (yes or no): ");
     char yes_or_no[10];
