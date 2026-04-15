@@ -20,7 +20,7 @@ LSTATUS regedit_set_value(regedit_all *data)
         (DWORD)(((wcslen(data->value) + 1) * sizeof(wchar_t))));
 }
 
-LSTATUS regedit_open_key(HKEY hkey, regedit_all *data)
+LSTATUS regedit_open_key(const HKEY hkey, regedit_all *data)
 {
     return RegOpenKeyExW(
         hkey,
@@ -30,7 +30,7 @@ LSTATUS regedit_open_key(HKEY hkey, regedit_all *data)
         &data->hkey);
 }
 
-void regedit_add_to_startup(regedit_all *data, LSTATUS status)
+void regedit_add_to_startup(regedit_all *data, const LSTATUS status)
 {
     switch (status)
     {
@@ -114,7 +114,7 @@ wchar_t **found_letter_drivers(const DWORD driver_number, unsigned int *length)
     return NULL;
 }
 
-void free_drivers(wchar_t **drivers_arr, unsigned int len)
+void free_drivers(wchar_t **drivers_arr, const unsigned int len)
 {
     if (!drivers_arr)
         return;
@@ -127,7 +127,9 @@ void free_drivers(wchar_t **drivers_arr, unsigned int len)
     free(drivers_arr);
 }
 
-UINT *сheck_for_static_disks(wchar_t **drivers_arr, unsigned int len)
+UINT *сheck_for_static_disks(
+    const wchar_t **drivers_arr,
+    const unsigned int len)
 {
     UINT *flag_array = (UINT *)calloc(len, sizeof(UINT));
 
@@ -137,4 +139,30 @@ UINT *сheck_for_static_disks(wchar_t **drivers_arr, unsigned int len)
     }
 
     return flag_array;
+}
+
+typedef struct
+{
+    wchar_t path[MAX_PATH];
+    LPWSTR file_part;
+    unsigned int path_length;
+} path_to_exe;
+
+path_to_exe get_path_to_exe(wchar_t *file_name)
+{
+    path_to_exe response;
+    DWORD length_path_to_exe = GetFullPathNameW(file_name,
+                                                MAX_PATH,
+                                                response.path,
+                                                &response.file_part);
+
+    if (length_path_to_exe == 0)
+    {
+        return response;
+    }
+    else
+    {
+        response.path_length = length_path_to_exe;
+        return response;
+    }
 }

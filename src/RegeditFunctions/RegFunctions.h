@@ -13,11 +13,19 @@ typedef struct
     LPCWSTR value;
 } regedit_all;
 
+typedef struct
+{
+    wchar_t path[MAX_PATH];
+    LPWSTR file_part[MAX_PATH];
+    unsigned int path_length;
+} path_to_exe;
+
 LSTATUS regedit_add_key(regedit_all *data);
 wchar_t **found_letter_drivers(const DWORD driver_number, unsigned int *length);
-LSTATUS regedit_open_key(HKEY parent_key, regedit_all *data);
-void regedit_add_to_startup(regedit_all *data, LSTATUS status);
-void free_drivers(wchar_t **drivers_arr, unsigned int len);
-UINT *сheck_for_static_disks(wchar_t **drivers_arr, unsigned int len);
+LSTATUS regedit_open_key(const HKEY hkey, regedit_all *data);
+void regedit_add_to_startup(regedit_all *data, const LSTATUS status);
+void free_drivers(wchar_t **drivers_arr, const unsigned int len);
+UINT *сheck_for_static_disks(wchar_t **drivers_arr, const unsigned int len);
+path_to_exe get_path_to_exe(wchar_t *file_name);
 
-#endif
+#endif // REGFUNCTIONS_H

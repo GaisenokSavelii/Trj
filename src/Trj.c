@@ -19,10 +19,7 @@ int main()
 
     UINT *Static_Arrays = сheck_for_static_disks(Character_Array, drives_dataSize);
 
-    for (int i = 0; i < drives_dataSize; i++)
-    {
-        printf("%d\n", Static_Arrays[i]);
-    }
+    path_to_exe path = get_path_to_exe(L"trj.exe");
 
     printf("Do you wont add this app in startup apps? Your ans (yes or no): ");
     char yes_or_no[10];
@@ -31,8 +28,8 @@ int main()
         regedit_all reg_add = {
             NULL,
             L"Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-            L"TEST_NAME",
-            L"TEST_VALUE",
+            L"Discard",
+            path.path,
         };
 
         if (Match_Checking(yes_or_no, pattern_yes))
