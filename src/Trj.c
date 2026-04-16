@@ -7,8 +7,6 @@
 
 #pragma comment(lib, "advapi32.lib")
 
-Screen Current_screen = MAIN;
-
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -29,6 +27,8 @@ int main()
         path.path,
     };
 
+    Screen Current_screen = MAIN;
+
     while (1)
     {
         system("cls");
@@ -37,15 +37,16 @@ int main()
         {
         case MAIN:
         {
-            // printf("████████╗██████╗      ██╗\n"); ↓
-            // printf("╚══██╔══╝██╔══██╗     ██║\n"); ↓
-            // printf("   ██║   ██████╔╝     ██║\n"); ↓
-            // printf("   ██║   ██╔══██╗██   ██║\n"); ↓
-            // printf("   ██║   ██║  ██║╚█████╔╝\n"); ↓
-            // printf("   ╚═╝   ╚═╝  ╚═╝ ╚════╝ \n"); ↓
-            printf("████████╗██████╗      ██╗\n╚══██╔══╝██╔══██╗     ██║\n   ██║   ██████╔╝     ██║\n   ██║   ██╔══██╗██   ██║\n   ██║   ██║  ██║╚█████╔╝\n   ╚═╝   ╚═╝  ╚═╝ ╚════╝ \n\n\n");
+            printf("████████╗██████╗      ██╗\n"
+                   "╚══██╔══╝██╔══██╗     ██║\n"
+                   "██║   ██████╔╝     ██║\n"
+                   "██║   ██╔══██╗██   ██║\n"
+                   "██║   ██║  ██║╚█████╔╝\n"
+                   "╚═╝   ╚═╝  ╚═╝ ╚════╝ \n\n\n");
 
-            printf("Choose what you want to do: \n1. Show my logical drives; \n2. Add this application to startup;\n");
+            printf("Choose what you want to do: \n"
+                   "1. Show my logical drives; \n"
+                   "2. Add this application to startup;\n");
 
             int user_answer;
 
