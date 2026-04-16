@@ -151,11 +151,9 @@ typedef struct
 path_to_exe get_path_to_exe(wchar_t *file_name)
 {
     path_to_exe response;
-    DWORD length_path_to_exe = GetFullPathNameW(file_name,
-                                                MAX_PATH,
-                                                response.path,
-                                                &response.file_part);
-
+    DWORD length_path_to_exe =
+        GetFullPathNameW(
+            file_name, MAX_PATH, response.path, &response.file_part);
     if (length_path_to_exe == 0)
     {
         return response;
