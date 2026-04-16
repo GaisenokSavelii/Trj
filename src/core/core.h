@@ -10,7 +10,8 @@ typedef enum
     DRIVES,
 } Screen;
 
-void add_to_startup(regedit_all reg_add);
+void add_to_startup_screen(regedit_all reg_add);
 void swich_user_input(int user_answer, Screen *Current_screen);
+void drives_info_screen();
 
 #endif

@@ -127,7 +127,7 @@ void free_drivers(wchar_t **drivers_arr, const unsigned int len)
     free(drivers_arr);
 }
 
-UINT *сheck_for_static_disks(
+UINT *сheck_for_static_drives(
     const wchar_t **drivers_arr,
     const unsigned int len)
 {

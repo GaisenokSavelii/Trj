@@ -12,12 +12,6 @@ int main()
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 
-    DWORD drives_data = GetLogicalDrives();
-    unsigned int drives_dataSize;
-    wchar_t **Character_Array = found_letter_drivers(drives_data, &drives_dataSize);
-
-    UINT *Static_Arrays = сheck_for_static_disks(Character_Array, drives_dataSize);
-
     path_to_exe path = get_path_to_exe(L"trj.exe");
 
     regedit_all reg_add = {
@@ -61,26 +55,24 @@ int main()
                 int c;
                 while ((c = getchar()) != '\n' && c != EOF)
                     ;
-
-                swich_user_input(user_answer, &Current_screen);
                 goto end;
             }
         }
 
         case ADD_TO_STARTUP:
         {
-            add_to_startup(reg_add);
+            add_to_startup_screen(reg_add);
             Current_screen = MAIN;
         }
 
         case DRIVES:
         {
+            drives_info_screen();
             Current_screen = MAIN;
         }
         }
     end:;
     }
 
-    free_drivers(Character_Array, drives_dataSize);
     return 0;
 }
