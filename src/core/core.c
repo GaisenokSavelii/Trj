@@ -1,9 +1,8 @@
-#include "../RegeditFunctions/RegFunctions.h"
-#include "../utils/Utils.h"
+#include "../registryFunctions/registryFunctions.h"
+#include "../utils/utils.h"
 #include <conio.h>
 #include <stdbool.h>
 #include <stdio.h>
-
 
 char pattern_yes[] = "y";
 char pattern_no[] = "n";

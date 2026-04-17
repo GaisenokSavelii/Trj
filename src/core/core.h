@@ -1,13 +1,12 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include "../RegeditFunctions/RegFunctions.h"
+#include "../registryFunctions/registryFunctions.h"
 
-typedef enum
-{
-    MAIN,
-    ADD_TO_STARTUP,
-    DRIVES,
+typedef enum {
+  MAIN,
+  ADD_TO_STARTUP,
+  DRIVES,
 } Screen;
 
 void add_to_startup_screen(regedit_all reg_add);
