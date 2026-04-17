@@ -1,5 +1,6 @@
-CC = "C:/Program Files/LLVM/bin/clang.exe"
-# or CC = clang, if you have compilator on system PATH var or use Linux
+CC = clang
+# "C:/Program Files/LLVM/bin/clang.exe"
+CFLAGS = --target=x86_64-w64-windows-gnu
 
 SRCS = src/Trj.c src/RegeditFunctions/RegFunctions.c src/utils/utils.c src/core/core.c
 OBJS = $(SRCS:.c=.o)
