@@ -72,8 +72,7 @@ void drives_info_screen() {
     }
   }
 
-  printf("press any key...");
-  _getch();
+  press_any_key();
 
   free_drivers(Character_Array, drives_dataSize);
   free(Static_Arrays);

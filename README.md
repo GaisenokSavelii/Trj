@@ -13,7 +13,7 @@ The program performs two main tasks:
 
 - `src/Trj.c` — main entry point, displays the menu and manages navigation.
 - `src/core/` — screen switching logic and user input handling.
-- `src/RegeditFunctions/` — registry functions and drive type detection.
+- `src/registryFunctions/` — registry functions and drive type detection.
 - `src/utils/` — utility function for input validation.
 
 ## Features
