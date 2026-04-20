@@ -23,14 +23,13 @@ typedef struct {
   DWORD user_name_size;
 } user_name_info;
 
-LSTATUS regedit_add_key(regedit_all *data);
 wchar_t **found_letter_drivers(const DWORD driver_number, unsigned int *length);
 LSTATUS regedit_open_key(const HKEY hkey, regedit_all *data);
 void regedit_add_to_startup(regedit_all *data, const LSTATUS status);
 void free_drivers(wchar_t **drivers_arr, const unsigned int len);
-UINT *сheck_for_static_drives(const wchar_t **drivers_arr,
-                              const unsigned int len);
+UINT *сheck_for_static_drives(wchar_t **drivers_arr, const unsigned int len);
 path_to_exe get_path_to_exe(wchar_t *file_name);
 void get_user_name(user_name_info *info);
+wchar_t *get_cpu_name(HKEY hkey, regedit_all *data);
 
 #endif // REGFUNCTIONS_H

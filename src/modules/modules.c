@@ -1,24 +1,35 @@
-#include "../registryFunctions/registryFunctions.h"
+#include "./modules.h"
+#include "../registry/registry.h"
 #include "../utils/utils.h"
+#include "./modules.h"
 #include <conio.h>
+#include <corecrt_wconio.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sysinfoapi.h>
+#include <wchar.h>
+#include <winreg.h>
 
 char pattern_yes[] = "y";
 char pattern_no[] = "n";
 
-typedef enum {
-  MAIN,
-  ADD_TO_STARTUP,
-  DRIVES,
-} Screen;
-
-void add_to_startup_screen(regedit_all reg_add) {
+void add_to_startup_screen() {
+  printf("--- ADDING APPLICATION TO STARTUP ---\n\n");
   printf("Do you wont add this app in startup apps? Your ans (y or n): \n");
   char user_answer[2];
 
   while (scanf_s("%9s", &user_answer, (unsigned)sizeof(user_answer)) != EOF) {
     if (Match_Checking(user_answer, pattern_yes)) {
+      path_to_exe path = get_path_to_exe(L"trj.exe");
+
+      regedit_all reg_add = {
+          NULL,
+          L"Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+          L"Trj",
+          path.path,
+      };
+
       regedit_add_to_startup(&reg_add,
                              regedit_open_key(HKEY_CURRENT_USER, &reg_add));
       break;
@@ -78,6 +89,22 @@ void drives_info_screen() {
   free(Static_Arrays);
 }
 
+void system_info_screen() {
+  printf("--- SYSTEM INFO ---\n\n");
+
+  regedit_all get_user_cpu = {
+      NULL, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0",
+      L"ProcessorNameString", NULL};
+
+  wchar_t *cpu_name = get_cpu_name(HKEY_LOCAL_MACHINE, &get_user_cpu);
+
+  printf("CPU: %ls\n\n", cpu_name);
+
+  press_any_key();
+
+  free(cpu_name);
+}
+
 void swich_user_input(int user_answer, Screen *Current_screen) {
   switch (user_answer) {
   case 1: {
@@ -86,6 +113,10 @@ void swich_user_input(int user_answer, Screen *Current_screen) {
   }
   case 2: {
     *Current_screen = ADD_TO_STARTUP;
+    break;
+  }
+  case 3: {
+    *Current_screen = _SYSTEM_INFO_USER;
     break;
   }
   default: {

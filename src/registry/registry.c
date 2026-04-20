@@ -1,14 +1,16 @@
 #include <Windows.h>
+#include <corecrt_wconio.h>
 #include <minwindef.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <sysinfoapi.h>
 #include <wchar.h>
 #include <winerror.h>
 #include <winnt.h>
 #include <winreg.h>
 
 #include "../utils/utils.h"
-#include "./registryFunctions.h"
+#include "./registry.h"
 
 LSTATUS regedit_set_value(regedit_all *data) {
   return RegSetValueExW(data->hkey, data->name_value, 0, REG_SZ,
@@ -21,23 +23,24 @@ LSTATUS regedit_open_key(const HKEY hkey, regedit_all *data) {
 }
 
 bool regedit_hkey_match_checking(const HKEY hkey, regedit_all *data) {
+  HKEY phkey;
   LSTATUS status =
-      RegOpenKeyExW(hkey, data->sub_key, 0, KEY_QUERY_VALUE, &data->hkey);
+      RegOpenKeyExW(hkey, data->sub_key, 0, KEY_QUERY_VALUE, &phkey);
 
   wchar_t buffer[MAX_PATH];
   DWORD size = sizeof(buffer);
 
   if (status == ERROR_SUCCESS) {
-    status = RegQueryValueExW(data->hkey, data->name_value, NULL, NULL,
+    status = RegQueryValueExW(phkey, data->name_value, NULL, NULL,
                               (LPBYTE)buffer, &size);
 
     if (status == ERROR_SUCCESS) {
-      RegCloseKey(data->hkey);
+      RegCloseKey(phkey);
       return true;
     }
   }
 
-  RegCloseKey(data->hkey);
+  RegCloseKey(phkey);
   return false;
 }
 
@@ -125,8 +128,7 @@ void free_drivers(wchar_t **drivers_arr, const unsigned int len) {
   free(drivers_arr);
 }
 
-UINT *сheck_for_static_drives(const wchar_t **drivers_arr,
-                              const unsigned int len) {
+UINT *сheck_for_static_drives(wchar_t **drivers_arr, const unsigned int len) {
   UINT *flag_array = (UINT *)calloc(len, sizeof(UINT));
 
   for (int i = 0; i < len; i++) {
@@ -163,4 +165,31 @@ void get_user_name(user_name_info *info) {
   } else {
     free(buffer);
   }
+}
+
+wchar_t *get_cpu_name(HKEY hkey, regedit_all *data) {
+  LSTATUS status =
+      RegOpenKeyExW(hkey, data->sub_key, 0, KEY_QUERY_VALUE, &data->hkey);
+
+  if (status == ERROR_SUCCESS) {
+    DWORD size;
+    RegQueryValueExW(data->hkey, data->name_value, 0, 0, NULL, &size);
+
+    wchar_t *buffer = (wchar_t *)malloc(size * sizeof(wchar_t));
+
+    status = RegQueryValueExW(data->hkey, data->name_value, 0, 0,
+                              (LPBYTE)buffer, &size);
+
+    if (status == ERROR_SUCCESS) {
+      return buffer;
+    } else {
+      printf("Error: %ld\n", status);
+      free(buffer);
+      return NULL;
+    }
+  } else {
+    printf("Error: %ld\n", status);
+  }
+
+  return NULL;
 }

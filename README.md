@@ -12,17 +12,13 @@ The program performs two main tasks:
 ## Project Structure
 
 - `src/Trj.c` — main entry point, displays the menu and manages navigation.
-- `src/core/` — screen switching logic and user input handling.
-- `src/registryFunctions/` — registry functions and drive type detection.
+- `src/modules/` — screen switching logic and user input handling.
+- `src/registry/` — registry functions and drive type detection.
 - `src/utils/` — utility function for input validation.
 
 ## Features
 
-- Uses Windows API:
-  - `GetLogicalDrives`
-  - `GetDriveTypeW`
-  - `RegOpenKeyExW`
-  - `RegSetValueExW`
+- Uses Windows API.
 - Supports UTF-8 output in the console.
 - Modular architecture for easier maintenance and extension.
 
@@ -31,7 +27,7 @@ The program performs two main tasks:
 Use a compiler that supports the Windows API, such as `clang` or `cl`.
 
 ```powershell
-clang.exe src\Trj.c src\core\core.c src\RegeditFunctions\RegFunctions.c src\utils\utils.c -o trj.exe
+clang.exe src\Trj.c src\modules\modules.c src\registry\registry.c src\utils\utils.c -o trj.exe
 ```
 
 ## Run

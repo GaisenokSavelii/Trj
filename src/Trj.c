@@ -1,23 +1,14 @@
 #include <Windows.h>
 #include <stdio.h>
 
-#include "core/core.h"
-#include "registryFunctions/registryFunctions.h"
+#include "modules/modules.h"
+#include "registry/registry.h"
 
 #pragma comment(lib, "advapi32.lib")
 
 int main() {
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
-
-  path_to_exe path = get_path_to_exe(L"trj.exe");
-
-  regedit_all reg_add = {
-      NULL,
-      L"Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-      L"Trj",
-      path.path,
-  };
 
   Screen Current_screen = MAIN;
 
@@ -38,9 +29,10 @@ int main() {
 
       printf("Hello, %ls! \n\n", user_info.user_name);
 
-      printf("Choose what you want to do: \n"
+      printf("Choose what you want to do (type number): \n"
              "1. Show my logical drives; \n"
-             "2. Add this application to startup;\n");
+             "2. Add this application to startup;\n"
+             "3. System info;\n");
 
       int user_answer;
 
@@ -59,13 +51,19 @@ int main() {
     }
 
     case ADD_TO_STARTUP: {
-      add_to_startup_screen(reg_add);
+      add_to_startup_screen();
       Current_screen = MAIN;
       break;
     }
 
     case DRIVES: {
       drives_info_screen();
+      Current_screen = MAIN;
+      break;
+    }
+
+    case _SYSTEM_INFO_USER: {
+      system_info_screen();
       Current_screen = MAIN;
       break;
     }
