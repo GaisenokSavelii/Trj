@@ -8,13 +8,7 @@
 #include <winreg.h>
 
 #include "../utils/utils.h"
-
-typedef struct {
-  HKEY hkey;
-  LPCWSTR sub_key;
-  LPCWSTR name_value;
-  LPCWSTR value;
-} regedit_all;
+#include "./registryFunctions.h"
 
 LSTATUS regedit_set_value(regedit_all *data) {
   return RegSetValueExW(data->hkey, data->name_value, 0, REG_SZ,
@@ -33,12 +27,14 @@ bool regedit_hkey_match_checking(const HKEY hkey, regedit_all *data) {
   wchar_t buffer[MAX_PATH];
   DWORD size = sizeof(buffer);
 
-  status = RegQueryValueExW(data->hkey, data->name_value, NULL, NULL,
-                            (LPBYTE)buffer, &size);
-
   if (status == ERROR_SUCCESS) {
-    RegCloseKey(data->hkey);
-    return true;
+    status = RegQueryValueExW(data->hkey, data->name_value, NULL, NULL,
+                              (LPBYTE)buffer, &size);
+
+    if (status == ERROR_SUCCESS) {
+      RegCloseKey(data->hkey);
+      return true;
+    }
   }
 
   RegCloseKey(data->hkey);
@@ -47,7 +43,7 @@ bool regedit_hkey_match_checking(const HKEY hkey, regedit_all *data) {
 
 void regedit_add_to_startup(regedit_all *data, const LSTATUS status) {
   if (regedit_hkey_match_checking(HKEY_CURRENT_USER, data)) {
-    printf("app up to date\n");
+    printf("App up to date\n");
     press_any_key();
     return;
   }
@@ -140,20 +136,31 @@ UINT *сheck_for_static_drives(const wchar_t **drivers_arr,
   return flag_array;
 }
 
-typedef struct {
-  wchar_t path[MAX_PATH];
-  LPWSTR file_part;
-  unsigned int path_length;
-} path_to_exe;
-
 path_to_exe get_path_to_exe(wchar_t *file_name) {
   path_to_exe response;
   DWORD length_path_to_exe =
-      GetFullPathNameW(file_name, MAX_PATH, response.path, &response.file_part);
+      GetFullPathNameW(file_name, MAX_PATH, response.path, response.file_part);
   if (length_path_to_exe == 0) {
     return response;
   } else {
     response.path_length = length_path_to_exe;
     return response;
+  }
+}
+
+void get_user_name(user_name_info *info) {
+  DWORD size_buffer;
+
+  GetUserName(NULL, &size_buffer);
+
+  LPWSTR buffer = (LPWSTR)malloc(size_buffer * sizeof(wchar_t));
+  if (!buffer)
+    return;
+
+  if (GetUserNameW(buffer, &size_buffer)) {
+    info->user_name = buffer;
+    info->user_name_size = size_buffer;
+  } else {
+    free(buffer);
   }
 }

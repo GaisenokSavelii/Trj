@@ -33,6 +33,11 @@ int main() {
              "   ██║   ██║  ██║╚█████╔╝\n"
              "   ╚═╝   ╚═╝  ╚═╝ ╚════╝ \n\n");
 
+      user_name_info user_info;
+      get_user_name(&user_info);
+
+      printf("Hello, %ls! \n\n", user_info.user_name);
+
       printf("Choose what you want to do: \n"
              "1. Show my logical drives; \n"
              "2. Add this application to startup;\n");
