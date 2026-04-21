@@ -1,5 +1,6 @@
 #include "./modules.h"
 #include "../registry/registry.h"
+#include "../system/system.h"
 #include "../utils/utils.h"
 #include "./modules.h"
 #include <conio.h>
@@ -102,8 +103,6 @@ void system_info_screen() {
   GetSystemInfo(&system_info);
 
   SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *x = get_logical_processors_info();
-
-  printf("%d", x->Relationship);
 
   wchar_t *cpu_name = get_cpu_name(HKEY_LOCAL_MACHINE, &get_user_cpu);
   wchar_t *arch = switch_cpu_architecture(system_info);

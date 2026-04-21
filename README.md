@@ -26,6 +26,7 @@ The project is organized into modular components for better maintainability:
 - `src/modules/` — menu navigation and user interaction logic
 - `src/registry/` — Windows Registry operations and drive type detection
 - `src/utils/` — helper functions (input validation and utility routines)
+- `src/system/` — All hardware and OS-related components
 
 ## Requirements
 

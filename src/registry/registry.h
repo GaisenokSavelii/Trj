@@ -31,7 +31,5 @@ UINT *сheck_for_static_drives(wchar_t **drivers_arr, const unsigned int len);
 path_to_exe get_path_to_exe(wchar_t *file_name);
 void get_user_name(user_name_info *info);
 wchar_t *get_cpu_name(HKEY hkey, regedit_all *data);
-wchar_t *switch_cpu_architecture(SYSTEM_INFO system_info);
-SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *get_logical_processors_info();
 
 #endif // REGFUNCTIONS_H
