@@ -4,11 +4,13 @@
 #include "./modules.h"
 #include <conio.h>
 #include <corecrt_wconio.h>
+#include <minwindef.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysinfoapi.h>
 #include <wchar.h>
+#include <winnt.h>
 #include <winreg.h>
 
 char pattern_yes[] = "y";
@@ -96,9 +98,19 @@ void system_info_screen() {
       NULL, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0",
       L"ProcessorNameString", NULL};
 
-  wchar_t *cpu_name = get_cpu_name(HKEY_LOCAL_MACHINE, &get_user_cpu);
+  SYSTEM_INFO system_info;
+  GetSystemInfo(&system_info);
 
-  printf("CPU: %ls\n\n", cpu_name);
+  SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *x = get_logical_processors_info();
+
+  printf("%d", x->Relationship);
+
+  wchar_t *cpu_name = get_cpu_name(HKEY_LOCAL_MACHINE, &get_user_cpu);
+  wchar_t *arch = switch_cpu_architecture(system_info);
+
+  printf("CPU: %ls,\n\n", cpu_name);
+  printf("Architecture: %ls,\n\n", arch);
+  printf("page size: %lu\n\n", system_info.dwPageSize);
 
   press_any_key();
 
