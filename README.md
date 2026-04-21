@@ -40,4 +40,4 @@ The project is organized into modular components for better maintainability:
 ### Using Clang
 
 ```powershell
-clang.exe src\Trj.c src\modules\modules.c src\registry\registry.c src\utils\utils.c -o trj.exe
+clang.exe src\Trj.c src\modules\modules.c src\registry\registry.c src\utils\utils.c src\system\system.c -o trj.exe
